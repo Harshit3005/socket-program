@@ -13,8 +13,6 @@ try :
     server_sock.listen(2)
     print("Server is up and running....")
 
-
-
 except Exception as e:
     print(f"Error 1: {e}") # print the error message # formated string
     sys.exit()
@@ -23,16 +21,16 @@ try:
     while True:
         client_sock, client_addr = server_sock.accept() # accept a connection from a client
         print(f"Client connected from {client_addr[0]}:{client_addr[1]}") # print the client's IP and port number
-        data = client_sock.recv(BUFFER).decode(FORMAT) # receive data from the client and decode it
-        if not data:
-            print("Client may be closed") 
-            break
-        print(f"Data received : {data}") # print the received data
-        client_sock.send("OK".encode(FORMAT))
+        while True:
+            data = client_sock.recv(BUFFER).decode(FORMAT) # receive data from the client and decode it
+            if not data:
+                print("Client may be closed") 
+                break
+            print(f"Data received : {data}") # print the received data
+            client_sock.send("OK".encode(FORMAT))
 except Exception as e:
     print(f"Error 2: {e}") # print the error message
 except KeyboardInterrupt:
     print("Server is closed")
     server_sock.close() # close the server socket
-    sys.exit()
-                                
+    sys.exit()           

@@ -3,19 +3,16 @@ import sys
 import random
 import time
 
-CLIENT_IP = "localhost"
-CLIENT_PORT = 52964
-
+SERVER_IP = "localhost"
+SERVER_PORT = 54321
 BUFFER = 1024 # 1KB
 FORMAT = "utf-8" # Encoding format
 
 try : 
     # create socket
     client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # TCP socket
-    client_sock.bind((CLIENT_IP, CLIENT_PORT)) # bind to address and port # passing a tuple (IP, PORT) inside the socket.bind() method
-    client_sock.listen(2)
-    print("Server is up and running....")
-
+    client_sock.connect((SERVER_IP, SERVER_PORT)) # bind to address and port # passing a tuple (IP, PORT) inside the socket.bind() method
+    print("Client connected with the server")
 
 except Exception as e:
     print(f"Error 1: {e}") # print the error message # formated string
@@ -31,15 +28,8 @@ try:
             print("Server may be down")
             break
         print("Server response: ", ack_msg) # print the acknowledgment message received from the client
-
-        client_sock, client_addr = client_sock.accept() # accept a connection from a client
-        print(f"Client connected from {client_addr[0]}:{client_addr[1]}") # print the client's IP and port number
-        data = client_sock.recv(BUFFER).decode(FORMAT) # receive data from the client and decode it
-        if not data:
-            print("Client may be closed") 
-            break
-        print(f"Data received : {data}") # print the received data
-        client_sock.send("OK".encode(FORMAT))
+        time.sleep(2)# wait for 5 seconds before sending the next sensor value
+        
 except Exception as e:
     print(f"Error 2: {e}") # print the error message
 except KeyboardInterrupt:
